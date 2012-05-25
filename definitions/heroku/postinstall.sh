@@ -65,9 +65,6 @@ chown postgres /var/pgsql/data/log
 # Start postgres
 su -c '/usr/bin/pg_ctl start -l /var/pgsql/data/log/logfile -D /var/pgsql/data' postgres
 
-# Add 'vagrant' role
-su -c 'createuser vagrant -s' postgres
-
 # Start postgres at boot
 sed -i -e 's/exit 0//g' /etc/rc.local
 echo "su -c '/usr/bin/pg_ctl start -l /var/pgsql/data/log/logfile -D /var/pgsql/data' postgres" >> /etc/rc.local
@@ -81,6 +78,11 @@ make
 make install
 cd ..
 rm -rf node*
+
+
+# Add 'vagrant' role for postgres (waiting to do this now to allow postgres to boot)
+su -c 'createuser vagrant -s' postgres
+
 
 # Add /opt/ruby/bin to the global path as the last resort so
 # Ruby, RubyGems, and Chef/Puppet are visible
