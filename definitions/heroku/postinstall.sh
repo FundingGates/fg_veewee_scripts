@@ -20,24 +20,24 @@ apt-get -y install nfs-common
 
 # Install Ruby from source in /opt so that users of Vagrant
 # can install their own Rubies using packages or however.
-wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz
-tar xvzf ruby-1.9.2-p180.tar.gz
-cd ruby-1.9.2-p180
+wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
+tar xvzf ruby-1.9.3-p194.tar.gz
+cd ruby-1.9.3-p194
 ./configure --prefix=/opt/ruby
 make
 make install
 cd ..
-rm -rf ruby-1.9.2-p180*
+rm -rf ruby-1.9.3-p194*
 chown -R root:admin /opt/ruby
 chmod -R g+w /opt/ruby
 
-# Install RubyGems 1.8.15
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.15.tgz
-tar xzf rubygems-1.8.15.tgz
-cd rubygems-1.8.15
+# Install RubyGems 1.8.24
+wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.24.tgz
+tar xzf rubygems-1.8.24.tgz
+cd rubygems-1.8.24
 /opt/ruby/bin/ruby setup.rb
 cd ..
-rm -rf rubygems-1.8.15*
+rm -rf rubygems-1.8.24*
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
@@ -58,19 +58,19 @@ rm -rf postgresql-9.1.3*
 useradd -p postgres postgres
 mkdir -p /var/pgsql/data
 chown postgres /var/pgsql/data
-sudo su -c "/usr/bin/initdb -D /var/pgsql/data --locale=en_US.UTF-8 --encoding=UNICODE" postgres
+su -c "/usr/bin/initdb -D /var/pgsql/data --locale=en_US.UTF-8 --encoding=UNICODE" postgres
 mkdir /var/pgsql/data/log
 chown postgres /var/pgsql/data/log
 
-# Add 'vagrant' role
-sudo su -c 'createuser vagrant -s' postgres
-
 # Start postgres
-sudo su -c '/usr/bin/pg_ctl start -l /var/pgsql/data/log/logfile -D /var/pgsql/data' postgres
+su -c '/usr/bin/pg_ctl start -l /var/pgsql/data/log/logfile -D /var/pgsql/data' postgres
+
+# Add 'vagrant' role
+su -c 'createuser vagrant -s' postgres
 
 # Start postgres at boot
 sed -i -e 's/exit 0//g' /etc/rc.local
-echo "sudo su -c '/usr/bin/pg_ctl start -l /var/pgsql/data/log/logfile -D /var/pgsql/data' postgres" >> /etc/rc.local
+echo "su -c '/usr/bin/pg_ctl start -l /var/pgsql/data/log/logfile -D /var/pgsql/data' postgres" >> /etc/rc.local
 
 # Install NodeJs for a JavaScript runtime
 git clone https://github.com/joyent/node.git
