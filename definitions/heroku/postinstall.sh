@@ -8,7 +8,12 @@ apt-get -y update
 apt-get -y upgrade
 apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline5-dev libyaml-dev
+
+# for capybara-webkit
+apt-get -y install libqt4-dev
+
 apt-get -y install git-core vim
+
 
 # Setup sudo to allow no-password sudo for "admin"
 cp /etc/sudoers /etc/sudoers.orig
